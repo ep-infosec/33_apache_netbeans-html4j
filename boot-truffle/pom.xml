@@ -1,0 +1,184 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+
+    Licensed to the Apache Software Foundation (ASF) under one
+    or more contributor license agreements.  See the NOTICE file
+    distributed with this work for additional information
+    regarding copyright ownership.  The ASF licenses this file
+    to you under the Apache License, Version 2.0 (the
+    "License"); you may not use this file except in compliance
+    with the License.  You may obtain a copy of the License at
+
+      http://www.apache.org/licenses/LICENSE-2.0
+
+    Unless required by applicable law or agreed to in writing,
+    software distributed under the License is distributed on an
+    "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+    KIND, either express or implied.  See the License for the
+    specific language governing permissions and limitations
+    under the License.
+
+-->
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <groupId>org.netbeans.html</groupId>
+        <artifactId>pom</artifactId>
+        <version>2.0-SNAPSHOT</version>
+    </parent>
+    <name>Presenter via Truffle</name>
+    <artifactId>net.java.html.boot.truffle</artifactId>
+    <version>2.0-SNAPSHOT</version>
+    <packaging>bundle</packaging>
+    <properties>
+        <netbeans.compile.on.save>NONE</netbeans.compile.on.save>
+        <publicPackages>net.java.html.boot.truffle</publicPackages>
+        <trufflejs>${java.home}/language/js/trufflejs.jar</trufflejs>
+        <skipTests>true</skipTests>
+    </properties>
+    <build>
+      <plugins>
+          <plugin>
+              <groupId>org.apache.felix</groupId>
+              <artifactId>maven-bundle-plugin</artifactId>
+              <extensions>true</extensions>
+              <configuration>
+                  <instructions>
+                      <Export-Package>${publicPackages}</Export-Package>
+                      <Bundle-SymbolicName>net.java.html.boot.truffle</Bundle-SymbolicName>
+                  </instructions>
+              </configuration>
+          </plugin>
+          <plugin>
+              <groupId>org.netbeans.html</groupId>
+              <artifactId>html4j-maven-plugin</artifactId>
+          </plugin>
+         <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-compiler-plugin</artifactId>
+            <configuration>
+               <source>1.7</source>
+               <target>1.7</target>
+            </configuration>
+         </plugin>
+         <plugin>
+             <groupId>org.netbeans.tools</groupId>
+             <artifactId>sigtest-maven-plugin</artifactId>
+             <version>1.0</version>
+             <executions>
+                 <execution>
+                     <goals>
+                         <goal>generate</goal>
+                         <goal>check</goal>
+                     </goals>
+                 </execution>
+             </executions>
+             <configuration>
+                 <sigfile>empty.sigtest</sigfile>
+             </configuration>
+         </plugin>
+      </plugins>
+    </build>
+    <dependencies>
+        <dependency>
+            <groupId>org.netbeans.api</groupId>
+            <artifactId>org-openide-util-lookup</artifactId>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.oracle.truffle</groupId>
+            <artifactId>truffle-api</artifactId>
+            <version>0.18</version>
+        </dependency>
+        <dependency>
+            <groupId>com.oracle.truffle</groupId>
+            <artifactId>truffle-dsl-processor</artifactId>
+            <version>0.18</version>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.netbeans.html</groupId>
+            <artifactId>net.java.html.boot</artifactId>
+            <version>${project.version}</version>
+            <type>jar</type>
+        </dependency>
+        <dependency>
+            <groupId>org.testng</groupId>
+            <artifactId>testng</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>net.java.html.json.tck</artifactId>
+            <version>${project.version}</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.glassfish.grizzly</groupId>
+            <artifactId>grizzly-http-server</artifactId>
+            <version>${grizzly.version}</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.glassfish.grizzly</groupId>
+            <artifactId>grizzly-websockets-server</artifactId>
+            <version>${grizzly.version}</version>
+            <scope>test</scope>
+            <type>jar</type>
+        </dependency>
+        <dependency>
+            <groupId>org.glassfish.grizzly</groupId>
+            <artifactId>grizzly-http-servlet</artifactId>
+            <version>${grizzly.version}</version>
+            <scope>test</scope>
+        </dependency>    
+        <dependency>
+            <groupId>javax.servlet</groupId>
+            <artifactId>javax.servlet-api</artifactId>
+            <scope>test</scope>
+            <version>3.1.0</version>
+        </dependency>
+        <dependency>
+            <groupId>org.netbeans.html</groupId>
+            <artifactId>ko4j</artifactId>
+            <version>${project.version}</version>
+            <scope>test</scope>
+            <type>jar</type>
+        </dependency>
+        <dependency>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>ko-ws-tyrus</artifactId>
+            <version>${project.version}</version>
+            <scope>test</scope>
+            <type>jar</type>
+        </dependency>
+        <dependency>
+            <groupId>com.dukescript.libraries</groupId>
+            <artifactId>net.java.html.lib</artifactId>
+            <version>0.3</version>
+            <scope>test</scope>
+        </dependency>
+    </dependencies>
+    <profiles>
+        <profile>
+            <id>graalvm</id>
+            <activation>
+                <file>
+                    <exists>${trufflejs}</exists>
+                </file>
+            </activation>
+            <properties>
+                <skipTests>false</skipTests>
+            </properties>
+            <dependencies>
+                <dependency>
+                    <groupId>com.oracle.graaljs</groupId>
+                    <artifactId>truffle-js</artifactId>
+                    <version>0.07</version>
+                    <systemPath>${trufflejs}</systemPath>
+                    <scope>system</scope>
+                </dependency>
+            </dependencies>
+        </profile>
+    </profiles>
+</project>

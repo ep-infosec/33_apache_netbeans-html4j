@@ -1,0 +1,612 @@
+<!--
+
+    Licensed to the Apache Software Foundation (ASF) under one
+    or more contributor license agreements.  See the NOTICE file
+    distributed with this work for additional information
+    regarding copyright ownership.  The ASF licenses this file
+    to you under the Apache License, Version 2.0 (the
+    "License"); you may not use this file except in compliance
+    with the License.  You may obtain a copy of the License at
+
+      http://www.apache.org/licenses/LICENSE-2.0
+
+    Unless required by applicable law or agreed to in writing,
+    software distributed under the License is distributed on an
+    "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+    KIND, either express or implied.  See the License for the
+    specific language governing permissions and limitations
+    under the License.
+
+-->
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>HTML for Java APIs</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    </head>
+    <body>
+        <p>
+        The <em>HTML/Java API</em> is an alternative to Swing and JavaFX for creating
+        applications with a graphical user interface. It's major strengths is the
+        intelligent combination of existing technologies.
+        <br>
+        With HTML/Java, the proven model used on servers for many years, has been ported to the client.
+         Java is used for developing business and view logic, while
+         HTML5, CSS and JavaScript are used to render the UI.
+        Get the best of both worlds by combining the industry stability of
+        <b>Java</b> and richness of <b>JavaScript</b> ecosystem when it comes
+        to UI and rendering frameworks.
+        </p>
+        <h3>Motivation</h3>
+        <p>
+         The motivation for this project is the inability of Swing and JavaFX
+         to keep up with the rapid development of browser based technologies, and the
+         <a href="http://www.oracle.com/technetwork/java/javase/javaclientroadmapupdate2018mar-4414431.pdf">uncertain future of Swing and JavaFX</a>.
+         The logical solution is to simply use these technologies from Java instead of trying to build a whole own alternative stack.
+         With Java/HTML we created a better and more powerful alternative, which is still small and easy to maintain.
+        </p>
+        <h3>Model View ViewModel Pattern</h3>
+        <p> For this Java/HTML makes use of the
+         <a href="https://en.wikipedia.org/wiki/Model%E2%80%93view%E2%80%93viewmodel">Model View ViewModel (MVVM)</a>
+         pattern to separate
+         the view from the logic of the application. This approach is different
+         from Swing or JavaFX, as the Java code doesn't require any references to the widgets
+         that are displayed in the view. The Java code instead exposes {@link net.java.html.json.Property properties}
+         for the View to bind to, and {@link net.java.html.json.Function functions} that can be called in response to user
+         interactions. This keeps the {@link net.java.html.json.Model Java API} small and simple to learn.</p>
+
+
+        <h3>Supported Platforms</h3>
+         <p>This architecture also makes it easy to port the technology to different platforms.         Porting of HTML/Java is as easy as implementing
+        {@link org.netbeans.html.boot.spi.Fn.Presenter}
+        interface and successfully passing the
+        {@link org.netbeans.html.json.tck test compatibility kit}.
+        Various ports of this rendering pipeline were built including support for
+        pure <a target="_blank" href="https://github.com/dukescript/dukescript-presenters/">"webkit desktop rendring</a>
+        <a target="_blank" href="https://dukescript.com/javadoc/presenters/com/dukescript/presenters/Android.html">Android WebView</a>
+        and <a target="_blank" href="https://dukescript.com/javadoc/presenters/com/dukescript/presenters/iOS.html">iOS WebView</a>
+        developed by <a target="_blank" href="https://dukescript.com/">DukeScript project</a>.
+        </p>
+        <p>
+        This technology has also been adopted by some Java bytecode to JavaScript
+        transpilers - for example <a target="_blank" href="http://teavm.org/docs/intro/dukescript.html">TeaVM</a>
+        or <a target="_blank" href="https://github.com/jtulach/bck2brwsr/">Bck2Brwsr VM</a> -
+        as such you can also run the same Java application in a <b>pluginless browser</b>.
+        </p>
+        <h3>Getting started</h3>
+
+        The easiest way to get started is following the
+        <a target="_blank" href="https://dukescript.com/getting_started.html">getting started</a>
+        tutorial. If you prefer commandline you can also use the <a href="https://github.com/dukescript/maven-archetypes" target="_blank">Maven Archetypes</a>.
+
+        Just type:
+        <pre>
+$ mvn archetype:generate \
+    -DarchetypeGroupId=com.dukescript.archetype \
+    -DarchetypeArtifactId=knockout4j-archetype \
+    -DgroupId=your.company -DartifactId=test -Dversion=1.0-SNAPSHOT
+    -DarchetypeVersion=0.30 \ <em># or newer version, if available</em>
+        </pre>
+
+        and then you can:
+        <pre>
+$ cd test
+$ mvn install
+$ mvn -f client/pom.xml process-classes exec:exec
+        </pre>
+
+        <h3>More Information</h3>
+        <p>We tried to make our API Docs as useful as possible, so they contain
+            lots of valuable information. So this should be your first stop when looking for information:
+            Current <a target="_blank" href="https://dukescript.com/javadoc/html+java/dev/">development</a> version
+
+        </p>
+        <p>The <a href="http://dukescript.com" target="_blank">DukeScript project</a> contains a lot of information for Java/HTML developers.
+            There's a <a href="http://dukescript.com/blog.html" target="_blank">Blog</a> with the latest news and tips and tricks
+            how to get the most out of these APIs and also an extensive <a href="https://dukescript.com/getting_started.html" target="_blank"> getting started guide</a>
+            explaining all the concepts and walking you through code examples. For advanced users there's an in depth tutorial on the <a href="https://dukescript.com/knockout4j.html" target="_blank">
+                Knockout For Java</a> API with many examples and tipps and tricks.
+        </p>
+
+
+
+        <h3>Try it</h3>
+        <p>And finally, if you want to see this API in action, look no further, here's
+            <a target="_blank" href="https://github.com/jtulach/minesweeper">an example</a>
+            application running with the <a href="https://github.com/jtulach/bck2brwsr/" target="_blank">Bck2Brwsr VM</a> directly in your browser.</p>
+                <script type="text/html" id="field">
+            <style type="text/css">
+                table.field td {
+                    padding: 4px;
+                    width: 18px;
+                    height: 18px;
+                    font-size: 1.5em;
+                    border: 1px solid black;
+                }
+                table.field td.UNKNOWN {
+                    background-color: #D6E4E1;
+                    cursor: pointer;
+                }
+                table.field td.EXPLOSION {
+                    background-color: #A31E39;
+                }
+                table.field td.DISCOVERED {
+                    background-color: #9DB2B1;
+                }
+            </style>
+            <table class="field">
+                <tbody>
+                    <!-- ko foreach: rows -->
+                    <tr>
+                        <!-- ko foreach: columns -->
+                        <td data-bind="css: style, click: $parents[1].click" >
+                            <div data-bind='html: html'></div>
+                        </td>
+                        <!-- /ko -->
+                    </tr>
+                    <!-- /ko -->
+                </tbody>
+            </table>
+        </script>
+
+        <center>
+        <div id="minesweeper" style="align: center">
+        <div data-bind="template: { name : 'field', if: fieldShowing }"></div>
+        </div>
+        </center>
+
+        <!-- boot bck2brwsr -->
+        <script src="resources/teavm.js" type="text/javascript"></script>
+        <script>
+            var vm = new VM();
+            vm.loadClass('org.apidesign.demo.minesweeper.MainBrwsr');
+        </script>
+
+        <h3>New in version 1.8.1</h3>
+        <p>
+            This is a bugfix release focused on improving
+            {@link org.netbeans.html.presenters.spi.ProtoPresenter}
+            when running in
+            {@linkplain org.netbeans.html.presenters.spi.ProtoPresenterBuilder#loadJavaScript(org.netbeans.html.presenters.spi.ProtoPresenterBuilder.Evaluator, boolean) asynchronous mode}.
+            <a target="_blank" href="https://github.com/apache/netbeans-html4j/pull/48">PR #48</a>
+            changes the
+            <a href="https://dukescript.com/knockout4j.html" target="_blank">Knockout For Java</a>
+            binding to use JavaScript {@code Promise} to properly order initialization
+            of many {@link net.java.html.json.Model} classes in a highly
+            asynchronous environment. As a result the underlying JavaScript
+            engine has to (since version 1.8.1) provide support for {@code Promise} or
+            <a href="https://github.com/apache/netbeans-html4j/commit/9f9e34d2c850e363cb9b815fe88c3750b66c78dc" target="_blank">
+            emulate it</a> somehow.
+        </p>
+        <h3>New in version 1.8</h3>
+        <p>
+            Asynchronous calls to Java - since <a target="_blank" href="https://github.com/apache/netbeans-html4j/pull/44">PR #44</a>
+            the {@link net.java.html.js.JavaScriptBody} annotation supports new
+            {@link net.java.html.js.JavaScriptBody#wait4java wait4java=false}
+            attribute. That allows one make an asynchronous call to Java.
+            More information in the updated
+            {@link net.java.html.js Java/JavaScript interactions} page.
+
+            Support for reactive programming simplified with
+            {@link net.java.html.json.Models#react} as provided by
+            <a target="_blank" href="https://github.com/apache/netbeans-html4j/pull/43">PR-43</a>.
+        </p>
+
+        <h3>New in version 1.7.3</h3>
+        <p>
+            Giving proper OSGi name to
+            <code>org.netbeans.html.presenters.spi</code>,
+            <code>org.netbeans.html.presenters.render</code>,
+            <code>org.netbeans.html.presenters.browser</code> and
+            <code>org.netbeans.html.presenters.webkit</code> modules -
+            <a target="_blank" href="https://github.com/apache/netbeans-html4j/pull/40">PR #40</a>.
+            Configure {@link org.netbeans.html.presenters.browser.Browser.Config#browser(java.util.function.Consumer) browser presenter}
+            to handle opening of a {@code URI} programmatically -
+            <a target="_blank" href="https://github.com/apache/netbeans-html4j/pull/42">PR #42</a>.
+        </p>
+
+        <h3>New in version 1.7.2</h3>
+        <p>
+            Code completions for callbacks from JavaScript to Java -
+            <a target="_blank" href="https://github.com/apache/netbeans-html4j/pull/36">PR #36</a>.
+            Support for ecj -
+            <a target="_blank" href="https://github.com/apache/netbeans-html4j/pull/37">PR #37</a>.
+            Robustness of {@link org.netbeans.html.presenters.spi.ProtoPresenter} improved -
+            <a target="_blank" href="https://github.com/apache/netbeans-html4j/pull/38">PR #38</a>.
+        </p>
+
+        <h3>New in version 1.7.1</h3>
+        <p>
+            Bugfix release to address robustness and security issues.
+        </p>
+
+        <h3>New in version 1.7</h3>
+        <p>
+            New modules are provided since
+            <a target="_blank" href="https://github.com/apache/netbeans-html4j/pull/23">PR #23</a>:
+        </p>
+        <ul>
+            <li>
+                {@link org.netbeans.html.presenters.render render}
+                - a way to start a browser - using native GTK (on Linux and Mac OS X), AWT or CLI
+            </li>
+            <li>
+                {@link org.netbeans.html.presenters.spi.ProtoPresenterBuilder}
+                - core implementation of a presenter that
+                handles connection between JavaScript VM and Java VM via a textual protocol
+            </li>
+            <li>
+                {@link org.netbeans.html.presenters.browser browser}
+                - uses of {@link org.netbeans.html.presenters.spi.ProtoPresenterBuilder}
+                to start a local server and let a browser connect to it
+            </li>
+            <li>
+                {@link org.netbeans.html.presenters.webkit webkit}
+                - native presenter for Linux and Mac OS X that uses WebKit via JNA
+            </li>
+        </ul>
+
+        <h3>What's new in older versions?</h3>
+
+        <p>
+        Click the
+        <a href="#" onclick="return showHistoric()">link</a>
+        to view even more
+        <a href="#" onclick="return showHistoric()">historic changes</a>...
+        </p>
+
+        <a name="historic.changes"></a>
+        <div id="historic.changes">
+            <script>
+            (function() {
+                var visible;
+                function showHistoric(show) {
+                    var e = document.getElementById("historic.changes");
+                    if (show === undefined) {
+                        show = !visible;
+                    }
+                    if (show) {
+                        e.style.display="block";
+                    } else {
+                        e.style.display="none";
+                    }
+                    visible = show;
+                    return false;
+                }
+                showHistoric(false);
+                this.showHistoric = showHistoric;
+            })()
+            </script>
+
+        <h3>New in version 1.6.1</h3>
+        <p>
+            One model instance can be used in two views
+            (<a target="_blank" href="https://github.com/apache/netbeans-html4j/pull/14">PR #14</a>).
+            GC related behavior has been improved
+            (<a target="_blank" href="https://github.com/apache/netbeans-html4j/pull/19">PR #19</a>).
+            Safe and {@link net.java.html.boot.script.Scripts sanitized builder} to
+            create {@link javax.script.ScriptEngine}-based execution environment
+            (<a target="_blank" href="https://github.com/apache/netbeans-html4j/pull/15">PR #15</a>).
+            Switching to
+            <a target="_blank" href="http://knockoutjs.com">knockout.js</a>
+            version 3.5.0
+            (<a target="_blank" href="https://github.com/apache/netbeans-html4j/pull/20">PR #20</a>).
+        </p>
+
+        <h3>New in version 1.6</h3>
+
+        <p>
+            Compiles on JDK11 while using
+            <a target="_blank" href="https://openjfx.io">Open JavaFX</a> 11
+            when necessary.
+            {@link net.java.html.json.ComputedProperty Computed properties} can
+            depend on other computed properties -
+            <a target="_blank" href="https://github.com/apache/netbeans-html4j/pull/3">PR #3</a>.
+            {@link net.java.html.js.JavaScriptResource} annotation has been
+            made repeatable -
+            <a target="_blank" href="https://github.com/apache/netbeans-html4j/pull/4">PR #4</a>.
+            <code>@Model</code> annotation processor bugfix
+            <a target="_blank" href="https://issues.apache.org/jira/browse/NETBEANS-621">#621</a>.
+        </p>
+
+        <h3>New in version 1.5.1</h3>
+
+        <p>
+            The project has been donated to <a target="_blank" href="http://apache.org">Apache Foundation</a>
+            and the code is now hosted in the
+            <a target="_blank" href="http://github.com/apache/netbeans-html4j">repository</a>
+            along other Apache incubating projects. Contribute to the project by forking its
+            <a target="_blank" href="http://github.com/apache/netbeans-html4j">GitHub repository</a>.
+        </p>
+
+        <p>
+            Using <a target="_blank" href="http://search.maven.org/#artifactdetails%7Ccom.vaadin.external.google%7Candroid-json%7C0.0.20131108.vaadin1%7Cjar">Android JSON</a>
+            parsing library as it is Apache licensed -
+            bug <a target="_blank" href="https://issues.apache.org/jira/browse/NETBEANS-89">#89</a>.
+            It is acceptable to read properties of a model when
+            {@link net.java.html.json.ComputedProperty computing a property}.
+            Regular subclassing of {@link org.netbeans.html.json.spi.Proto.Type} is
+            possible.
+            Bugfix <a target="_blank" href="https://issues.apache.org/jira/browse/NETBEANS-99">#99</a>
+            - better garbage collector related behavior of <b>ko4j</b> instances thanks
+            to introduction of {@link org.netbeans.html.json.spi.Technology.ToJavaScript}.
+            Mentioning <a target="_blank" href="http://knockoutjs.com">knockout.js</a>
+            license in the <b>ko4j</b> artifact - bug
+            <a target="_blank" href="https://issues.apache.org/jira/browse/NETBEANS-98">#98</a>.
+            Simplifying dependencies of {@link org.netbeans.html.json.tck} - bug
+            <a target="_blank" href="https://issues.apache.org/jira/browse/NETBEANS-111">#111</a>
+        </p>
+
+        <!-- following ones were added in version 1.5 -->
+
+        <p>
+        Bug fix for <a target="_blank" href="https://bz.apache.org/netbeans/show_bug.cgi?id=270481">
+        multiple observers</a> on a single model object.
+        Better <a target="_blank" href="https://bz.apache.org/netbeans/show_bug.cgi?id=270553">
+        GC behavior</a> specified in TCK and used in Knockout for Java implementation.
+        Removing dependency on Java collection classes implementations.
+        Adding {@link net.java.html.json.Models#asList} factory method to
+        a create simple list implementation.
+        Simplifying {@link org.netbeans.html.json.tck.KnockoutTCK} to avoid
+        usage of {@link java.net.URI}, etc.
+        </p>
+
+        <h3>New features in version 1.4</h3>
+
+        Both values <code>null</code> and <code>undefined</code> are
+        <a href="net/java/html/js/package-summary.html#undefined">treated as null</a>.
+        Better behavior under <a target="_blank" href="https://bz.apache.org/netbeans/show_bug.cgi?id=259132">
+        multi-threaded load</a>.
+        <!--
+        Integration with <a href="net/java/html/boot/truffle/package-summary.html">Truffle</a>.
+        <a target="_blank" href="https://bz.apache.org/netbeans/show_bug.cgi?id=269549"/>
+        -->
+        Workaround for garbage collector behavior of modern JavaFX WebView
+        implementations (JDK8 u112 and newer).
+        JavaFX Presenter can
+        <a target="_blank" href="https://bz.apache.org/netbeans/show_bug.cgi?id=269456"/>
+        show popup</a> window.
+        Development has switched to
+        <a target="_blank" href="https://github.com/jtulach/html-java-api/"/>
+        Git repository</a> thanks to
+        <a target="_blank" href="http://wiki.apidesign.org/wiki/Apache"/>
+        conversion by Emilian Bold</a>.
+        Better support for obfuscation of knockout module
+        (bug <a target="_blank" href="https://bz.apache.org/netbeans/show_bug.cgi?id=270013"/>
+        270013</a>).
+
+
+        <h3>Improvements in version 1.3</h3>
+
+        {@link net.java.html.json.Model Model classes} can have
+        {@link net.java.html.json.Model#instance() per-instance private data}.
+        {@link net.java.html.json.Model Model classes} can generate
+        builder-like construction methods if builder
+        {@link net.java.html.json.Model#builder() prefix} is specified.
+        {@link net.java.html.json.Property#mutable} can be <code>false</code>
+        to define a non-mutable (almost constant) property. That
+        in case of <em>Knockout</em> bindings means: the property is
+        represented by a plain value rather than an observable in the JavaScript
+        object. The <em>JavaFX</em> presenter can be executed in headless mode -
+        just specify <code>-Dfxpresenter.headless=true</code> when launching
+        its virtual machine and no window will be shown. This is particularly
+        useful for testing. Configure your <em>surefire</em> or <em>failsafe</em>
+        plugins like: <pre>
+&lt;plugin&gt;
+  &lt;groupId&gt;org.apache.maven.plugins&lt;/groupId&gt;
+  &lt;artifactId&gt;maven-surefire-plugin&lt;/artifactId&gt;
+  &lt;version&gt;2.13&lt;/version&gt;
+  &lt;configuration&gt;
+      &lt;systemPropertyVariables&gt;
+          &lt;fxpresenter.headless&gt;true&lt;/fxpresenter.headless&gt;
+      &lt;/systemPropertyVariables&gt;
+  &lt;/configuration&gt;
+&lt;/plugin&gt;
+</pre>
+        OSGi headers are now <a target="_blank" href="https://bz.apache.org/netbeans/show_bug.cgi?id=256696">
+            enterprise OSGi ready</a>.
+        Switched to <a target="_blank" href="https://bz.apache.org/netbeans/show_bug.cgi?id=257130">minified version 3.4.0</a>
+        of <a target="_blank" href="http://knockoutjs.com">knockout.js</a>.
+        Better support for <a target="_blank" href="https://bz.apache.org/netbeans/show_bug.cgi?id=257348">
+        recursive @Model definitions</a>.
+        New module <code>org.netbeans.html:xhr4j</code> provides implementation
+        of {@link org.netbeans.html.json.spi.Transfer} with
+        {@link org.netbeans.html.context.spi.Contexts.Id technology identifier}
+        <b>xhr4j</b> - this module can be used to
+        <a target="_blank" href='https://bz.apache.org/netbeans/show_bug.cgi?id=257849'>workaround limitations
+        of CORS</a> by handling the {@link net.java.html.json.OnReceive}
+        connections in Java.
+
+        <h3>What's Been Improved in Version 1.2.3?</h3>
+
+        <p>
+        One can control {@link net.java.html.json.OnReceive#headers() HTTP request headers}
+        when connecting to server using the {@link net.java.html.json.OnReceive}
+        annotation. It is possible to have
+        {@link net.java.html.json.ComputedProperty#write() writable computed properties}.
+        There is an easy way to enable <a target="_blank" href="http://getfirebug.com/">Firebug</a> in
+        the JavaFX based Web View -
+        just run with <code>-Dfirebug.lite=true</code> as
+        <a target="_blank" href="https://www.youtube.com/watch?v=2rxwY-QJiLo">this video</a>
+        demonstrates.
+        Bugfix of issues <a target="_blank" href='https://bz.apache.org/netbeans/show_bug.cgi?id=250503'>250503</a>,
+        <a target="_blank" href='https://bz.apache.org/netbeans/show_bug.cgi?id=252987'>252987</a>.
+        </p>
+
+        <h3>What's New in Version 1.1?</h3>
+
+        <p>
+            The content of a {@link net.java.html.BrwsrCtx context}
+            can be selected by registering implementations under specific
+            {@link org.netbeans.html.context.spi.Contexts.Id technology identifiers}
+            and requesting them during
+            {@link org.netbeans.html.context.spi.Contexts#newBuilder(java.lang.Object...) construction}
+            of the context. <code>org.netbeans.html:ko4j</code> module's implementation
+            offers <b>ko4j</b>, <b>xhr</b> and <b>websocket</b> identifiers
+            for its registered services
+            (e.g. {@link org.netbeans.html.json.spi.Technology},
+            {@link org.netbeans.html.json.spi.Transfer} and
+            {@link org.netbeans.html.json.spi.WSTransfer}).
+            <code>org.netbeans.html:ko-ws-tyrus</code>
+            module registers its
+            {@link org.netbeans.html.json.spi.Transfer Java based JSON} and
+            {@link org.netbeans.html.json.spi.WSTransfer WebSocket} implementations
+            under the name <b>tyrus</b>.
+        </p>
+        <p>
+            A particular DOM subtree
+            that a <a target="_blank" href="http://knockoutjs.com">knockout.js</a> model gets
+            applied to can be selected by using
+            {@link net.java.html.json.Models#applyBindings(java.lang.Object,java.lang.String)
+            Models.applyBindings(m, id)} with an id of an HTML element.
+            There is new {@link net.java.html.json.Model#targetId()} attribute
+            which controls behavior of the generated <code>applyBindings</code> method.
+            If <em>specified and non-empty</em>, then the generated method
+            will call {@link net.java.html.json.Models#applyBindings(java.lang.Object,java.lang.String)}
+            with <code>this</code> and the provided {@link net.java.html.json.Model#targetId() target id}.
+            If <em>specified, but left empty</em>, then the generated method
+            calls {@link net.java.html.json.Models#applyBindings(java.lang.Object)}.
+            <em>If unspecified</em>, the method will <b>not</b> be generated at all
+            (a change with respect to older versions). However one can
+            still use {@link net.java.html.json.Models#applyBindings(java.lang.Object)}
+            or {@link net.java.html.json.Models#applyBindings(java.lang.Object,java.lang.String)}
+            to perform the association of any model with the page element.
+        </p>
+        <p>
+            Memory model when using Knockout bindings has been improved
+            (required additions of two new methods:
+            {@link org.netbeans.html.json.spi.PropertyBinding#weak()} and
+            {@link org.netbeans.html.json.spi.FunctionBinding#weak()}) and
+            now the Java {@link net.java.html.json.Model models} can garbage collect,
+            when no longer used. Library writers that use
+            {@link net.java.html.js.JavaScriptBody} annotation can also
+            control garbage collection behavior of method arguments by
+            setting {@link net.java.html.js.JavaScriptBody#keepAlive() keepAlive=false}
+            attribute.
+        </p>
+
+        <h3>What's New in Version 1.0?</h3>
+
+        <p>
+            {@link net.java.html.json.Property#array() Array properties} are now
+            mutable from the <a href="http://knockoutjs.com">knockout.js</a>
+            point of view (required {@link org.netbeans.html.json.spi.Proto.Type#replaceValue one SPI change}).
+            The page lookup mechanism can use {@link net.java.html.boot.BrowserBuilder#locale(java.util.Locale) locale}
+            to load localized a page with appropriate suffix.
+            All SPI were moved under the NetBeans namespace - e.g.
+            {@link org.netbeans.html.boot.spi},
+            {@link org.netbeans.html.context.spi},
+            {@link org.netbeans.html.json.spi},
+            {@link org.netbeans.html.sound.spi}, and also
+            {@link org.netbeans.html.json.tck}. Methods annotated
+            with {@link net.java.html.js.JavaScriptBody} annotation and
+            without fallback Java code now throw {@link java.lang.IllegalStateException}
+            with a message suggesting to switch to proper
+            {@link net.java.html.BrwsrCtx#execute browser context} to
+            prevent endless debugging when one forgets to do so.
+        </p>
+
+
+        <h3>What's New in Version 0.9?</h3>
+
+        <p>
+            System can run in {@link net.java.html.boot.BrowserBuilder#classloader(java.lang.ClassLoader) Felix OSGi container} (originally only Equinox).
+            {@link net.java.html.json.ComputedProperty Derived properties}
+            now deeply check changes in other {@link net.java.html.json.Model model
+            classes} they depend on and recompute their values accordingly.
+            <a target="_blank" href="http://knockoutjs.com">Knockout.js</a> library has been updated
+            to version 3.2.0.
+        </p>
+
+        <h3>What's New in 0.8.x Versions?</h3>
+
+        <p>
+            Setters or array properties on classes generated by {@link net.java.html.json.Model}
+            annotation can be accessed from any thread. {@link org.netbeans.html.sound.spi.AudioEnvironment}
+            can be registered into {@link net.java.html.BrwsrCtx}. There is
+            a {@link net.java.html.json.Models#parse(net.java.html.BrwsrCtx, java.lang.Class, java.io.InputStream, java.util.Collection)  method}
+            to parse a JSON array and convert it into
+            {@link net.java.html.json.Model model classes}.
+            Improved behavior of <code>enum</code> values in
+            {@link net.java.html.json.Model knockout bindings}.
+        </p>
+
+        <p>
+            Few bugfixes for better portability.
+            New API for {@link net.java.html.boot.script.Scripts headless execution}
+            on top of <em>Nashorn</em> - does not run <em>knockout for Java</em>
+            fully yet
+            (reported as <a href="https://bugs.openjdk.java.net/browse/JDK-8046013">JDK-8046013</a>),
+            however even in current state it is quite
+            {@link net.java.html.boot.script.Scripts useful for testing}
+            of
+            {@link net.java.html.js Java/JavaScript interactions}.
+        </p>
+
+        <p>
+            {@link net.java.html.boot.fx.FXBrowsers} has been extended
+            with new helper methods to make it easier to use HTML+Java
+            API in existing JavaFX applications.
+            The annotation processor is made
+            more robust with respect to errors in callback syntax of
+            {@link net.java.html.js.JavaScriptBody} body parameter.
+            Javadoc of {@link net.java.html.BrwsrCtx#execute} method
+            has been improved based on a failure of its usability study.
+            There can be additional parameters to methods annotated by
+            {@link net.java.html.json.OnReceive} that allows one to
+            pass state when a JSON call is made and use it when it finishes.
+            The mechanism of discovery of sibling HTML page has been
+            extended to work on systems that don't support
+            {@link java.lang.Class#getProtectionDomain}.
+        </p>
+
+        <p>
+            The first argument of method annotated by
+            {@link net.java.html.json.OnReceive} annotation has to
+            be the associated {@link net.java.html.json.Model model class}.
+        </p>
+
+        <p>
+            {@link net.java.html.json.OnReceive} annotation now accepts
+            {@link java.util.List} of data values as second argument
+            (previously required an array).
+        </p>
+
+
+        <h3>What's New in 0.7.x Versions?</h3>
+
+        <p>
+            {@link net.java.html.js.JavaScriptBody} annotation has new attribute
+            {@link net.java.html.js.JavaScriptBody#wait4js()} which allows
+            asynchronous execution. Libraries using
+            {@link net.java.html.js.JavaScriptBody} are urged to use this
+            new attribute as much as possible, as it can speed up execution
+            in certain environments.
+        </p>
+
+        <p>
+            Use {@link net.java.html.BrwsrCtx#execute(java.lang.Runnable)} in
+            multi-threaded environment to execute your code on the browser thread.
+            See example
+            {@link net.java.html.BrwsrCtx#execute(java.lang.Runnable) using Java timer}.
+        </p>
+        </div>
+
+        <h2>Other Resources</h2>
+
+        <img src="net/java/html/json/doc-files/DukeHTML.png" width="256" height="184" alt="Duke and HTML5. Together at last!" align="right"/>
+
+        The javadoc for latest and previous versions is also available
+        online:
+        <ul>
+            <li>Current <a target="_blank" href="https://bits.netbeans.org/html+java/dev/">development</a> version
+            <li>Version <a target="_blank" href="https://bits.netbeans.org/html+java/1.7.1/">1.7.1</a>
+            <li>Version <a target="_blank" href="https://bits.netbeans.org/html+java/1.7/">1.7</a>
+            <!--
+            <li>Historic versions
+            </li>
+            -->
+        </ul>
+    </body>
+</html>
